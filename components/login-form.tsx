@@ -27,16 +27,16 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
   const signIn = async () => {
     const { email } = formState
 
-    // const [, tld] = email.split('@')
-    // if (tld !== process.env.NEXT_PUBLIC_ALLOWED_DOMAINS) {
-    //   return new Error('You are not allowed here')
-    // }
+    const [, tld] = email.split('@')
+    if (tld !== process.env.NEXT_PUBLIC_ALLOWED_DOMAINS) {
+      return new Error('You are not allowed here')
+    }
 
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
         emailRedirectTo: `${window.location.origin}/api/auth/callback`,
-        shouldCreateUser: false
+        shouldCreateUser: true
       }
     })
     return error
